@@ -1,6 +1,5 @@
 package com.my.learn;
 
-import com.my.learn.MyFirstVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.Json;
@@ -49,7 +48,7 @@ public class MyFirstVerticleTest {
                                                 .put("driver_class", "org.hsqldb.jdbcDriver")
                                         );
         // We pass the options as the second parameter of the deployVerticle method.
-        vertx.deployVerticle(MyFirstVerticle.class.getName(),options,context.asyncAssertFailure());
+        vertx.deployVerticle(MyFirstVerticle.class.getName(),options,context.asyncAssertSuccess());
     }
 
     /**
@@ -76,7 +75,7 @@ public class MyFirstVerticleTest {
         // message. Then, we call the `complete` method on the async handler to declare this async (and here the test) done.
         // Notice that the assertions are made on the 'context' object and are not Junit assert. This ways it manage the
         // async aspect of the test the right way.
-        vertx.createHttpClient().getNow(port,"172.20.69.31","/",(response)->{
+        vertx.createHttpClient().getNow(port,"localhost","/",(response)->{
             response.handler(body->{
                context.assertTrue(body.toString().contains("hello"));
                async.complete();
@@ -87,7 +86,7 @@ public class MyFirstVerticleTest {
     @Test
     public void checkThatIndexPageIsServed(TestContext context) {
         Async async = context.async();
-        vertx.createHttpClient().getNow(port,"172.20.69.31","/assets/index.html",(response)->{
+        vertx.createHttpClient().getNow(port,"localhost","/assets/index.html",(response)->{
             context.assertEquals(response.statusCode(),200);
             context.assertTrue(response.getHeader("content-type").contains("text/html"));
             response.handler(body->{
@@ -101,7 +100,7 @@ public class MyFirstVerticleTest {
     public void checkThatWeCanAdd(TestContext context) {
         Async async = context.async();
         final String json = Json.encodePrettily(new Whisky("Jameson", "Ireland"));
-        vertx.createHttpClient().post(port,"172.20.69.31","/api/whiskies")
+        vertx.createHttpClient().post(port,"localhost","/api/whiskies")
                 .putHeader("content-type","application/json")
                 .putHeader("content-length",Integer.toString(json.length()))
                 .handler(response->{

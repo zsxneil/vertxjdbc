@@ -179,7 +179,7 @@ public class MyFirstVerticle extends AbstractVerticle {
 
     private void completeStartup(AsyncResult<HttpServer> http,Future<Void> fut) {
         if (http.succeeded()) {
-            fut.succeeded();
+            fut.complete();
         } else {
             fut.fail(http.cause());
         }
@@ -196,7 +196,7 @@ public class MyFirstVerticle extends AbstractVerticle {
            fut.fail(result.cause());
        } else {
            SQLConnection connection = result.result();
-           connection.execute("CREATE TABLE IF NOT EXISTS Whisky(id Integer IDENTIFY,name varchar(100),origin varchar(100))",
+           connection.execute("CREATE TABLE IF NOT EXISTS Whisky(id Integer IDENTITY,name varchar(100),origin varchar(100))",
                    ar->{
                         if (ar.failed()) {
                             fut.fail(ar.cause());
