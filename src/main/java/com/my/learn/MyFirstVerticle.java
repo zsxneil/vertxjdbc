@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * after build and package with maven ,
+ * you can start up the app use 'java -jar target/my-first-app-1.0-SNAPSHOT-fat.jar -conf src/main/conf/my-application-conf.json'
  * Created by neil on 2017/9/21.
  */
 public class MyFirstVerticle extends AbstractVerticle {
@@ -49,8 +51,9 @@ public class MyFirstVerticle extends AbstractVerticle {
                 Whisky w = result.result();
                 context.response()
                         .setStatusCode(201)
-                        .putHeader("content=type","application/json;charset=utf-8")
+                        .putHeader("content-type","application/json;charset=utf-8")
                         .end(Json.encodePrettily(w));
+                connection.close();
             });
         });
     }
